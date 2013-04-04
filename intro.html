@@ -47,9 +47,10 @@
       </div>
       <aside class="note">
         <p>
-        All code in this and the following tutorial can be edited in-place.
-        This means that you can use ⌃A (Ctrl-A) or ⌘A (Cmd-A) to easily select
-        and copy all code in a field.<br>
+        All code in this and the following tutorials can be edited in-place.
+        This means that you can use Ctrl-A (on Windows) or ⌘A (on Mac) to easily select
+        and copy all code in a textfield.<br>
+        <!-- ⌃A (Ctrl&#45;A) or ⌘A (Cmd&#45;A) -->
         All code is fully runnable given you change the paths to point
         to your downloaded Portal PHP Client, and include the setup code given
         below.
@@ -119,7 +120,8 @@ echo "SessionGUID: " . $client-&gt;SessionGUID() . "<br />";
       <h3>Searching</h3>
       <p>
         The easiest way to retrieve some objects from a CHAOS database is to
-        search.
+        search. This is done with the method
+        <code>PortalClient::Object()::GetBySearch()</code>:
       </p>
 
       <aside class="code">
@@ -165,6 +167,27 @@ echo "Got " . $serviceResult-&gt;MCM()-&gt;Count() . "/" . $serviceResult-&gt;MC
         <dd>include object relations for an object in the results.</dd>
       </dl>
 
+      <p>
+        <code>PortalClient::Object()::GetBySearch()</code> returns a
+        <code>serviceResult</code>.
+        The <code>serviceResult</code> has a number of fields, of which
+        <code>MCM()</code> is the most important and the one we are going to be
+        using.
+      </p>
+
+      <dl>
+        <dt><code>serviceResult-&gt;MCM()-&gt;Results()</code></dt>
+        <dd>The result of the CHAOS query: A list of objects (URL, metadata
+        etc.). An explaination of these objects is found in the next section.</dd>
+        <dt><code>serviceResult-&gt;MCM()-&gt;Count()</code></dt>
+        <dd>The number of objects on this page, i.e. the number of  objects available
+        to you in the <code>serviceResult-&gt;MCM()-&gt;Results()</code>.<br>
+        If you want all the objects from a query at
+        once you will have to increase the <code>pageSize</code> or go through
+        all pages via <code>pageIndex</code>.</dd>
+        <dt><code>serviceResult-&gt;MCM()-&gt;TotalCount()</code></dt>
+        <dd>The number of objects that matched the query</dd>
+      </dl>
 
       <p>
         Now the resulting objects are quite big, so let's only grab one, by
@@ -180,7 +203,7 @@ $serviceResult = $client-&gt;Object()-&gt;GetSearchSchemas(
   "da",         // language code
   $accessPointGUID,
   0,            // pageIndex
-  10,           // pageSize
+  1,           // pageSize
   true,         // includeMetadata
   true,         // includeFiles
   true          // includeObjectRelations
@@ -255,9 +278,11 @@ var_dump($objects[0]);
   <i>public</i> 'FullName' <font color='#888a85'>=&gt;</font> <small>string</small> <font color='#cc0000'>'CHAOS.MCM.Data.DTO.Object'</font> <i>(length=25)</i>
 </pre>
       </aside>
-      <p> What you can see here is that we get a list of objects. Each object
-      has a GUID and an ObjectTypeID. Furthermore we can see that each object
-      has a list of files and a list of metadata.</p>
+      <p>
+        What you get from a CHAOS query is an array of objects like the one
+        above. Each object has a GUID and an ObjectTypeID. Furthermore we can see
+        that each object has a list of files and a list of metadata.
+      </p>
 
       <p>Try turning off and on <code>includeFiles</code> and
       <code>includeMetadata</code> and changing <code>pageSize</code> and
