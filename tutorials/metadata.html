@@ -55,7 +55,8 @@
       <section>
       <h3>Grabbing a single object</h3>
       <p>In many cases it will makes sense to only request a single known object.
-      Objects are identified by their GUID:</p>
+      Objects are identified by their GUID. We can grab a single object by its
+      GUID with <code>PortalClient::Object()::GetByObjectGUID()</code>:</p>
 
       <aside class="code">
       <pre><code class="language-php">&lt;?php
@@ -77,7 +78,9 @@ echo "Grabbed object (GUID): " . $object-&gt;GUID;
       <h3>Files</h3>
       <p>
       Files belonging to an object can be of different types -- video, audio,
-      images and basically any other kind of file.
+      images and basically any other kind of file. The files can be found in the
+      <code>Files</code> attribute in the objects returned from
+      <code>serviceResult-&gt;MCM()-&gt;Results()</code>:
       </p>
 
 
@@ -160,6 +163,10 @@ for ($i = 0; $i &lt; count($object-&gt;Files); $i++) {
       to the database and it could be anything - as a general rule the structure
       and content of such metadata should be known to you already or documented
       someplace you know.-->
+      The metadata can be found in the <code>Metadatas</code> attribute of the
+      objects returned from
+      <code>serviceResult-&gt;MCM()-&gt;Results()</code>.<br>
+      <code>Metadatas</code> is an array of strings containing XML documents.
       Let's have a look:
       </p>
 
@@ -213,8 +220,8 @@ echo "Abstract: " . $obj_desc;
 ?&gt;</code></pre>
       </aside>
 
-      <p>The result should be:</p>
-      <pre>Title: Uden titel<br>Abstract: En mand i profil med sideskilning og et mut ansigtsudtryk</pre>
+        <p>The result should be:</p>
+        <pre>Title: Uden titel<br>Abstract: En mand i profil med sideskilning og et mut ansigtsudtryk</pre>
       </section>
 
 
